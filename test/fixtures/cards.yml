@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  stack_id: 1
+  front: MyString
+  back: MyString
+
+two:
+  stack_id: 1
+  front: MyString
+  back: MyString

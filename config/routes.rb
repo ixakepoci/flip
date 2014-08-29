@@ -1,18 +1,21 @@
 Flip::Application.routes.draw do
 
+  resources :cards
+
+
+
+
   #match "/auth/:provider/callback" => "sessions#create"
   get 'auth/:provider/callback', to: 'sessions#create'
+  get 'cards', to: 'stacks#show'
 
   match "/signout" => "sessions#destroy", :as => :signout
-
-
-
-  
-get "log_in" => "sessions#new", :as => "log_in"
-get "sign_up" => "users#new", :as => "sign_up"
-resources :users
-resources :sessions
-root :to => 'sessions#show'
+  match "/dashboard" => "stacks#index"
+  get "log_in" => "sessions#new", :as => "log_in"
+  get "sign_up" => "users#new", :as => "sign_up"
+  resources :users
+  resources :sessions
+  root :to => 'sessions#show'
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
@@ -40,10 +43,9 @@ root :to => 'sessions#show'
   #   end
 
   # Sample resource route with sub-resources:
-  #   resources :products do
-  #     resources :comments, :sales
-  #     resource :seller
-  #   end
+     resources :stacks do
+       resources :cards
+     end
 
   # Sample resource route with more complex sub-resources
   #   resources :products do

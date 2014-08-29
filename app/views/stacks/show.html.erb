@@ -1,0 +1,45 @@
+
+
+
+<p>
+  <b>Name:</b>
+  <%= @stack.name %>
+</p>
+<p>
+  <b>Description:</b>
+  <%= @stack.description %>
+</p>
+<%= link_to 'Edit', edit_stack_path(@stack) %> |
+<%= link_to 'Back', stacks_path %>
+
+<%= form_for @stack_card do |f| %>
+    <%= f.hidden_field :stack_id, :value => @stack.id %>
+    <div class="field">
+    <%= f.label :front %><br />
+    <%= f.text_field :front %>
+  </div>
+  <div class="field">
+    <%= f.label :back %><br />
+    <%= f.text_field :back %>
+  </div>
+    <%= f.submit 'Add card' %>
+<% end %>
+
+
+<div class = "card-container">
+
+<% @cards.each do |card| %>
+	<div class = "card">
+	<%= card.front %>
+	<%= card.back %>
+	
+	<%= link_to 'Show', card %>
+    <%= link_to 'Edit', edit_card_path(card) %>
+    <%= button_to 'Destroy', card, method: :delete, data: { confirm: 'Are you sure?' } %> 
+    </div>
+
+<% end %>
+
+</div>
+<%= will_paginate @cards %>
+<div>Icons made by OCHA from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a></div>

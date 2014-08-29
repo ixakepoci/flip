@@ -24,5 +24,8 @@
     <%= f.password_field :password_confirmation %>
   </p>
   <p class="button"><%= f.submit %></p>
+                            <%= link_to image_tag("twitterauth.png"), "/auth/twitter" %>
+                          <%= link_to image_tag("fbauth.png"), "/auth/facebook" %>
+                          <%= link_to image_tag("googleauth.png"), "/auth/google_oauth2" %>
 <% end %>
 

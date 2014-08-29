@@ -1,0 +1,8 @@
+<h1>I'm dashboard page.</h1>
+<% if @user.stacks.any? %>
+      <h3>Stacks (<%= @user.stacks.count %>)</h3>
+      <ol>
+        <%= render @stacks %>
+      </ol>
+      
+<% end %>

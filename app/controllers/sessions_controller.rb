@@ -1,5 +1,7 @@
 class SessionsController < ApplicationController
+before_filter :disable_nav
 	def show
+    
 	end
 	def create
 
@@ -7,7 +9,7 @@ class SessionsController < ApplicationController
 			user = User.authenticate(params[:email], params[:password])
 			if user
     			session[:user_id] = user.id
-    			redirect_to root_url, :notice => "Logged in!"
+    			redirect_to dashboard_url
   			else
     			flash.now.alert = "Invalid email or password"
     			render "new"
@@ -16,7 +18,7 @@ class SessionsController < ApplicationController
   			auth = request.env["omniauth.auth"]
   			user = User.find_by_provider_and_uid(auth["provider"],auth["uid"])||User.create_with_omniauth(auth)
   			session[:user_id] = user.id
-  			redirect_to root_url, :notice => "Signed in!"
+  			redirect_to dashboard_url
   		end
   	end
 

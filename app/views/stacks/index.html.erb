@@ -1,0 +1,43 @@
+<h1>Listing stacks</h1>
+
+
+            
+        
+
+<div class = 'stack-container'>
+<% @stacks.each do |stack| %>
+  <div class="stack">
+    <div class="outside">
+        <div class="inside">
+  <%= stack.user_id %>
+      <%= link_to 'Show', stack %>
+      <%= link_to 'Edit', edit_stack_path(stack) %>
+      <%= link_to 'Destroy', stack, method: :delete, data: { confirm: 'Are you sure?' } %>
+      <p class="font"><%=stack.name%></p>
+      </div>
+    </div>    
+</div>
+<% end %>
+</div>
+
+<br />
+
+<%= link_to 'New Stack', new_stack_path %>
+<%= will_paginate @stacks %>
+
+<script>
+$('.stack').click(function(event) {
+var oldheight = $(this).height();
+var oldwidth = $(this).width();
+var oldstetchesheight = $(this).find('.outside').height();
+var oldstetcheswidth = $(this).find('.inside').width();
+//$(this).css({'height': 600 + 'px'});
+//$(this).css({'width': 400 + 'px'});
+//$(this).find('.outside').css({'height': 600 + 'px'});
+//$(this).find('.inside').css({'height': 600 + 'px'});
+$(this).animate({width:oldwidth*2+"px", height:oldheight*2+"px",queue: false},400);
+$(this).find('.outside').animate({width:oldstetcheswidth*2+"px", height:oldstetchesheight*2+"px",queue: false},400);
+$(this).find('.inside').animate({width:oldstetcheswidth*2+"px", height:oldstetchesheight*2+"px",queue: false},400);
+//$(this).animate({height:oldheight*2+"px"},400);
+});
+</script>
