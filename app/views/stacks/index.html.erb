@@ -1,11 +1,7 @@
-<h1>Listing stacks</h1>
+<div class = "stack-container">
 
-
-            
-        
-
-<div class = 'stack-container'>
 <% @stacks.each do |stack| %>
+<div style = "width:40%;float:right;"></div>
   <div class="stack">
     <div class="outside">
         <div class="inside">
@@ -19,25 +15,76 @@
 </div>
 <% end %>
 </div>
-
+ 
 <br />
 
 <%= link_to 'New Stack', new_stack_path %>
 <%= will_paginate @stacks %>
 
 <script>
+jQuery.fn.center = function () {
+    var elposition = this.position();
+    //this.css("z-index", "100");
+    var top = this.css("top");
+    var left = this.css("left");
+    this.css("position", "absolute");
+    this.css("top", elposition.top+"px");
+    this.css("left", elposition.left+"px");
+
+    //this.css({top:elposition.top+"px", left:elposition.left+"px"});
+    this.animate({top: (50) + "%",queue: false},400);
+    this.animate({left: Math.max(0, (($(window).width() - $(this).outerWidth()) / 2.5) + $(window).scrollLeft()) + "px",queue: false},400);
+
+    return this;
+}
+
+
 $('.stack').click(function(event) {
 var oldheight = $(this).height();
 var oldwidth = $(this).width();
-var oldstetchesheight = $(this).find('.outside').height();
-var oldstetcheswidth = $(this).find('.inside').width();
-//$(this).css({'height': 600 + 'px'});
-//$(this).css({'width': 400 + 'px'});
-//$(this).find('.outside').css({'height': 600 + 'px'});
-//$(this).find('.inside').css({'height': 600 + 'px'});
-$(this).animate({width:oldwidth*2+"px", height:oldheight*2+"px",queue: false},400);
-$(this).find('.outside').animate({width:oldstetcheswidth*2+"px", height:oldstetchesheight*2+"px",queue: false},400);
-$(this).find('.inside').animate({width:oldstetcheswidth*2+"px", height:oldstetchesheight*2+"px",queue: false},400);
-//$(this).animate({height:oldheight*2+"px"},400);
+
+var outw = $(this).find('.outside').width();
+var outh = $(this).find('.outside').height();
+var inw = $(this).find('.inside').width();
+var inh = $(this).find('.inside').height();
+
+var prevtop=50;
+
+$other_stacks = $('.stack').not(this);
+$other_stacks.css("position", "absolute");
+
+$other_stacks.each(function( index ) {
+//  if(index<5){posrigth = 1;postop=10 + index*15}
+//  else{posrigth = 13;postop=10 + (index-5)*15}
+//  $(this).animate({top:  postop + "%", right:posrigth+"%",queue: false},400);
+//$(this).animate({top:  5+"%", left:5+"%",queue: false},400);
+//$(this).animate({width:0+"px", height:0+"px",queue: false},400);
+//$(this).find('p.font').animate({fontSize: 0,queue: false},400);
+
+$(this).fadeOut(200);
+
+});
+
+
+
+
+
+//var new_top = Math.max(0, (($(window).height() - $(this).outerHeight()) / 2) + $(window).scrollTop());
+//this.css("position","absolute");
+//this.find('.outside, .inside').css("position","absolute");
+
+$(this).animate({width:oldwidth*3+"px", height:oldheight*3+"px",queue: false},400);
+$(this).find('.outside').animate({width:(outw*3+14)+"px", height:outh*3+"px",queue: false},400);
+$(this).find('.inside').animate({width:(inw*3+11)+"px", height:inh*3+"px",queue: false},400);
+
+$(this).find('p.font').animate({fontSize: '90px',marginTop: '75px',queue: false},400);
+$(this).center();
+//$(this).animate({'box-shadow': '0px 1px 20px rgba(0,0,0,0.5)'});
+
+
+//this.find('.outside, .inside').css("z-index", "-1");
+
+//$(this).animate({top:  new_top + "px",queue: false},400);
+//$(this).animate({left: Math.max(0, (($(window).width() - $(this).outerWidth()) / 2) + $(window).scrollLeft()) + "px",queue: false},400);
 });
 </script>

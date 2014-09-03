@@ -27,11 +27,16 @@ function resizeDiv() {
 
 vph = ($(window).height()-50)/5;
 wrk = $(window).height()-50;
+stack_width = $(window).width()/2;
+stack_height = $(window).height()/2;
+
 $('.btn').css({'height': vph + 'px'});
 $('.btn').css({'width': vph + 'px'});
 $('.img-responsive').css({'height': (vph-50) + 'px'});
 $('.img-responsive').css({'width': (vph-50) + 'px'});
 $('#left-nav').css({'width': vph + 'px'});
-$('body').css({'height': wrk + 'px'});
+//$('.stack').css({'height': stack_height + 'px'});
+//$('.stack').css({'width': stack_width + 'px'});
+
 }
 
