@@ -1,90 +1,120 @@
+<div style = "position:absolute; top:10%;left:16%;">
+  <%= link_to 'New Stack', new_stack_path %>
+  <%= will_paginate @stacks%>
+</div>
 <div class = "stack-container">
-
-<% @stacks.each do |stack| %>
-<div style = "width:40%;float:right;"></div>
-  <div class="stack">
-    <div class="outside">
-        <div class="inside">
-  <%= stack.user_id %>
-      <%= link_to 'Show', stack %>
-      <%= link_to 'Edit', edit_stack_path(stack) %>
-      <%= link_to 'Destroy', stack, method: :delete, data: { confirm: 'Are you sure?' } %>
-      <p class="font"><%=stack.name%></p>
+  <% @stacks.each do |stack| %>
+    <div style = "width:40%;float:right;"></div>
+    <div class="stack">  
+      <div class = 'spine'>
+        <div class="out">
+          <div class="in"></div>
+        </div>
       </div>
-    </div>    
+      <div class = 'bottom-front'>
+        <% stack.cards.each do |card| %>
+          <div class = "card"> 
+            <%= card.id %>
+            <%= card.front %>
+            <%= card.back %>
+            <%= link_to 'Show', card %>
+            <%= link_to 'Edit', edit_card_path(card) %>
+            <%= button_to 'Destroy', card, method: :delete, data: { confirm: 'Are you sure?' } %>
+          </div>
+        <% end %>
+        <div class = 'pocket'>
+          <div class = 'pocket-btns'>
+            <div class = 'restart-btn'></div>
+            <div class = 'shuffle-btn'></div>
+        </div>
+          <div class="out">
+            <div class="in"></div>
+          </div>
+        </div>
+        <div class="outside">
+          <div class="inside"></div>
+        </div>
+      </div>
+      <div class="f1_card">
+        <div class="front face ">
+          <%= stack.user_id %>
+          <%= link_to 'Show', stack %>
+          <%= link_to 'Edit', edit_stack_path(stack) %>
+          <%= link_to 'Destroy', stack, method: :delete, data: { confirm: 'Are you sure?' } %>
+          <p class="font"><%=stack.name%></p>
+        </div>
+        <div class="back face center">bye</div>
+        <div class="outside">
+          <div class="inside"></div>
+        </div>
+      </div>
+    </div>
+  <% end %>
 </div>
-<% end %>
-</div>
- 
-<br />
-
-<%= link_to 'New Stack', new_stack_path %>
-<%= will_paginate @stacks %>
 
 <script>
-jQuery.fn.center = function () {
-    var elposition = this.position();
-    //this.css("z-index", "100");
-    var top = this.css("top");
-    var left = this.css("left");
-    this.css("position", "absolute");
-    this.css("top", elposition.top+"px");
-    this.css("left", elposition.left+"px");
+jQuery.fn.rotate = function(degrees) {
+    $(this).css({'-webkit-transform' : 'rotateY('+ degrees +'deg)',
+                 '-moz-transform' : 'rotateY('+ degrees +'deg)',
+                 '-ms-transform' : 'rotateY('+ degrees +'deg)',
+                 'transform' : 'rotateY('+ degrees +'deg)'});
+    return $(this);
+};
 
-    //this.css({top:elposition.top+"px", left:elposition.left+"px"});
-    this.animate({top: (50) + "%",queue: false},400);
-    this.animate({left: Math.max(0, (($(window).width() - $(this).outerWidth()) / 2.5) + $(window).scrollLeft()) + "px",queue: false},400);
+(function() {
+    var highest = 2;
 
+    $.fn.bringToTop = function() {
+        this.css('z-index', ++highest);
+    };
+})();
+
+$.fn.shuffle = function(){
+    for(var j, x, i = this.length; i; j = Math.floor(Math.random() * i), x = this[--i], this[i] = this[j], this[j] = x);
     return this;
-}
+};
 
+$('.stack').one('click',function(event) {
+  
+    var oldheight = $(this).height();
+    var oldwidth = $(this).width();
+    var outw = $(this).find('.outside').width();
+    var outh = $(this).find('.outside').height();
+    var inw = $(this).find('.inside').width();
+    var inh = $(this).find('.inside').height();
+    $other_stacks = $('.stack').not(this);
+    $other_stacks.fadeOut( "slow" ).remove();
+    $(this).animate({width:oldwidth*2.5+"px", height:oldheight*2.5+"px",queue: false},400);
+    $(this).find('.outside').animate({width:(outw*2.5+6)+"px", height:(outh*2.5+6)+"px",queue: false},400);
+    $(this).find('.inside').animate({width:(inw*2.5+2)+"px", height:(inh*2.5+2)+"px",queue: false},400);
+    $(this).find('p.font').animate({fontSize: '5em',marginTop: '25%',queue: false},400);
 
-$('.stack').click(function(event) {
-var oldheight = $(this).height();
-var oldwidth = $(this).width();
+    $(this).one('click',function(event) {     
+      $('.spine').rotate(-180);
+      $('.f1_card').animate({'marginLeft' : "+=5%" ,queue: false},0);
+      $('.stack:hover .f1_card').css("transform", "rotate3d(0,1,0,180deg)");
+      $('.stack:hover .f1_card').css("transform-origin", "100% 0%");      
+      $('.card').css("z-index","1");
+    });
+    $(this).animate({left: 10+ "%",queue: false},400);
+    $('.card').click(function() {      
+      $('.f1_card, .spine').css("z-index","0");
+      $('.pocket').css("z-index","1000");
+      angle = Math.random() * 2 - 1;
+      $(this,'.card:last').animate({left: "110%"}, 1000 ).css("transform", "rotate("+angle+"deg)").bringToTop();
+      $(this).addClass("viewed");
+     
 
-var outw = $(this).find('.outside').width();
-var outh = $(this).find('.outside').height();
-var inw = $(this).find('.inside').width();
-var inh = $(this).find('.inside').height();
+    });
+    $(".restart-btn").click(function() {
+      $( ".viewed" ).each(function(index) {
+        $( this ).css("transform", "rotate(0deg)").animate({left: "2%"}, 2000 ).removeClass('viewed').bringToTop();
+      });
+    });
 
-var prevtop=50;
+        $('.shuffle-btn').click(function() {alert($('.card').length);
+          $('.card').not('viewed').shuffle().each(function(index) {$(this).bringToTop();});
+    });  
 
-$other_stacks = $('.stack').not(this);
-$other_stacks.css("position", "absolute");
-
-$other_stacks.each(function( index ) {
-//  if(index<5){posrigth = 1;postop=10 + index*15}
-//  else{posrigth = 13;postop=10 + (index-5)*15}
-//  $(this).animate({top:  postop + "%", right:posrigth+"%",queue: false},400);
-//$(this).animate({top:  5+"%", left:5+"%",queue: false},400);
-//$(this).animate({width:0+"px", height:0+"px",queue: false},400);
-//$(this).find('p.font').animate({fontSize: 0,queue: false},400);
-
-$(this).fadeOut(200);
-
-});
-
-
-
-
-
-//var new_top = Math.max(0, (($(window).height() - $(this).outerHeight()) / 2) + $(window).scrollTop());
-//this.css("position","absolute");
-//this.find('.outside, .inside').css("position","absolute");
-
-$(this).animate({width:oldwidth*3+"px", height:oldheight*3+"px",queue: false},400);
-$(this).find('.outside').animate({width:(outw*3+14)+"px", height:outh*3+"px",queue: false},400);
-$(this).find('.inside').animate({width:(inw*3+11)+"px", height:inh*3+"px",queue: false},400);
-
-$(this).find('p.font').animate({fontSize: '90px',marginTop: '75px',queue: false},400);
-$(this).center();
-//$(this).animate({'box-shadow': '0px 1px 20px rgba(0,0,0,0.5)'});
-
-
-//this.find('.outside, .inside').css("z-index", "-1");
-
-//$(this).animate({top:  new_top + "px",queue: false},400);
-//$(this).animate({left: Math.max(0, (($(window).width() - $(this).outerWidth()) / 2) + $(window).scrollLeft()) + "px",queue: false},400);
-});
+  });  
 </script>

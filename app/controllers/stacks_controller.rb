@@ -4,13 +4,18 @@ class StacksController < ApplicationController
   require 'will_paginate/array'
   before_filter :authenticate_user
   def index
-    @stacks = current_user.stacks.paginate(:per_page => 10, :page => params[:page]) 
-
+    cookies.delete :stack_id
+    @stacks = current_user.stacks.paginate(:per_page => 10, :page => params[:page])
+    if(cookies[:stack_id])
+      @selected_stack = Stack.find(:id=>cookies[:stack_id].to_i)
+      render :index      
+    end
 
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @stacks }
     end
+
   end
 
   # GET /stacks/1

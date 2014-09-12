@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
 	protect_from_forgery
   	helper_method :current_user
   	require 'will_paginate/array'
+    
 
   	def show
   	end
