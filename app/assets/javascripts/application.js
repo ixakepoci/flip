@@ -40,3 +40,9 @@ $('#left-nav').css({'width': vph + 'px'});
 
 }
 
+$(function() {
+  $(".pagination a").live("click", function() {
+    $.getScript(this.href);
+    return false;
+  });
+});

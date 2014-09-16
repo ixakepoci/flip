@@ -3,19 +3,36 @@ class StacksController < ApplicationController
   # GET /stacks.json
   require 'will_paginate/array'
   before_filter :authenticate_user
+
+
+
+
+
+
   def index
-    cookies.delete :stack_id
-    @stacks = current_user.stacks.paginate(:per_page => 10, :page => params[:page])
+    @card = Card.new
+   
+    
+    if params[:tag]
+      @stacks =  current_user.stacks.tagged_with(params[:tag]).paginate(:per_page => 10, :page => params[:page])
+    else
+      @stacks =  current_user.stacks.paginate(:per_page => 10, :page => params[:page])
+    end
     if(cookies[:stack_id])
-      @selected_stack = Stack.find(:id=>cookies[:stack_id].to_i)
-      render :index      
+      @selected_stack = Stack.find(cookies[:stack_id].to_i)
+          
     end
 
     respond_to do |format|
+      format.js
       format.html # index.html.erb
       format.json { render json: @stacks }
     end
 
+  end
+
+  def manage
+     @stacks =  current_user.stacks
   end
 
   # GET /stacks/1

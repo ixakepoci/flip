@@ -16,6 +16,8 @@ Flip::Application.routes.draw do
   resources :users
   resources :sessions
   root :to => 'sessions#show'
+  get 'tags/:tag', to: 'stacks#index', as: :tag
+  get 'manage', to: 'stacks#manage'
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

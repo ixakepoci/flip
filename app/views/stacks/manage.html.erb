@@ -1,0 +1,8 @@
+<ul>
+<% @stacks.each do |stack| %>
+<li><%=stack.name%>
+         <%= link_to 'Show', stack %>
+      <%= link_to 'Edit', edit_stack_path(stack) %>
+        <%= link_to 'Destroy', stack, method: :delete, data: { confirm: 'Are you sure?' } %></li>
+          <%end%>
+      </ul>

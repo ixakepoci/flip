@@ -1,0 +1,138 @@
+<div style = "position:absolute; top:10%;left:16%;">
+  <%= link_to 'New Stack', new_stack_path %>
+  <%= link_to 'Manage', manage_path %>
+  <%= will_paginate @stacks%>
+</div>
+<% @stacks.each do |stack| %>
+  <div style = "width:40%;float:right;"></div>
+  <div class="stack" id = <%=stack.id%>>
+    <div class = 'spine'>
+      <div class="out">
+        <div class="in"></div>
+      </div>
+    </div>
+    <div class = 'bottom-front'>
+      <% stack.cards.each do |card| %>
+
+      <div class = "card">
+
+        <%= card.id %>
+        <%= link_to 'Edit', edit_card_path(card) %>
+        <%= button_to 'Destroy', card, method: :delete, data: { confirm: 'Are you sure?' } %>
+        <%= card.front %>
+        <hr>
+        <%= card.back %>
+      </div>
+      <% end %>
+      <div id = "new_card" ></div>
+      <div class = 'pocket'>
+        <!--p class="font"><%=stack.name%></p-->
+        <div class = 'metal'> 
+          <div class = 'bolt' style = 'top:2%;'></div>
+          <div class = 'bolt' style = 'bottom:2%;'></div>
+          <div class = 'restart-btn'></div>
+          <div class = 'shuffle-btn'></div>
+          <div class = 'newcard-btn'></div>
+        </div>
+        <!--Tags: <%= raw stack.tag_list.map { |t| link_to t, tag_path(t) }.join(', ') %>-->
+        <div class="out">
+          <div class="in"></div>
+        </div>
+      </div>
+      <div class="outside">
+        <div class="inside"></div>
+      </div>
+      
+    </div>
+    <div class="f1_card">
+      <div class="front face ">
+        <p class="font"><%=stack.name%></p>
+        <div id = 'stack_id' style = 'visibility: hidden;'><%stack.id%></div>
+      </div>
+      <div class="back face center"></div>
+      <div class="outside">
+        <div class="inside"></div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<script>
+jQuery.fn.rotate = function(degrees) {
+    $(this).css({'-webkit-transform' : 'rotateY('+ degrees +'deg)',
+                 '-moz-transform' : 'rotateY('+ degrees +'deg)',
+                 '-ms-transform' : 'rotateY('+ degrees +'deg)',
+                 'transform' : 'rotateY('+ degrees +'deg)'});
+    return $(this);
+};
+
+(function() {
+    var highest = 2;
+
+    $.fn.bringToTop = function() {
+        this.css('z-index', ++highest);
+    };
+})();
+
+$.fn.shuffle = function(){
+    for(var j, x, i = this.length; i; j = Math.floor(Math.random() * i), x = this[--i], this[i] = this[j], this[j] = x);
+    return this;
+};
+
+$('.stack').one('click',function(event) {
+  $.cookie("stack_id", this.id);
+
+  
+    var oldheight = $(this).height();
+    var oldwidth = $(this).width();
+    var outw = $(this).find('.outside').width();
+    var outh = $(this).find('.outside').height();
+    var inw = $(this).find('.inside').width();
+    var inh = $(this).find('.inside').height();
+    $other_stacks = $('.stack').not(this);
+    $other_stacks.fadeOut( "slow" ).remove();
+    $(this).animate({width:oldwidth*2.5+"px", height:oldheight*2.5+"px",queue: false},400);
+    $(this).find('.outside').animate({width:(outw*2.5+6)+"px", height:(outh*2.5+6)+"px",queue: false},400);
+    $(this).find('.inside').animate({width:(inw*2.5+2)+"px", height:(inh*2.5+2)+"px",queue: false},400);
+    $(this).find('p.font').animate({fontSize: '5em',marginTop: '25%',queue: false},400);
+
+    $(this).one('click',function(event) {     
+      $('.spine').rotate(-180);
+      $('.f1_card').animate({'marginLeft' : "+=5%" ,queue: false},0);
+      $('.stack:hover .f1_card').css("transform", "rotate3d(0,1,0,180deg)");
+      $('.stack:hover .f1_card').css("transform-origin", "100% 0%");      
+      $('.card').css("z-index","1");
+    });
+    $(this).animate({left: 10+ "%",queue: false},400);
+
+    $('.card, #new_card').click(function() {      
+      $('.f1_card, .spine').css("z-index","0");
+      $('.pocket').css("z-index","1000");
+      angle = Math.random() * 2 - 1;
+      $(this,'.card:last').animate({left: "110%"}, 1000 ).css("transform", "rotate("+angle+"deg)").bringToTop();
+      $(this).addClass("viewed");
+     
+
+    });
+    $(".restart-btn").click(function() {
+      $( ".viewed" ).each(function(index) {
+        $( this ).css("transform", "rotate(0deg)").animate({left: "2%"}, 2000 ).removeClass('viewed').bringToTop();
+        $('#new_card').css("transform", "rotate(0deg)").animate({left: "2%"}, 2000 ).removeClass('viewed').bringToTop();
+      });
+    });
+
+    $('.shuffle-btn').click(function() {
+      $('.card').not('viewed').shuffle().each(function(index) {$(this).bringToTop();});
+    });  
+
+  });  
+
+  $(function() {
+  $(".newcard-btn").live("click", function() {
+    $('#new_card').append('<%= escape_javascript(render("/cards/form")) %>').bringToTop();
+    $('#new_card').animate({'left' : "110%" ,queue: false},400).addClass('card').bringToTop();
+    return false;
+  });
+});
+
+</script>

@@ -26,12 +26,14 @@ class CardsController < ApplicationController
   # GET /cards/new
   # GET /cards/new.json
   def new
+
     @card = Card.new
 
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @card }
     end
+
   end
 
   # GET /cards/1/edit
@@ -47,6 +49,7 @@ class CardsController < ApplicationController
 
     respond_to do |format|
       if @card.save
+        format.js
         format.html { redirect_to "/stacks/#{@card.stack_id}", notice: 'Card was successfully created.' }
         format.json { render json: @card, status: :created, location: @card }
       else

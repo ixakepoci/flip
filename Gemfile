@@ -16,6 +16,7 @@ gem 'sass-rails'
 gem 'jquery-rails'
 gem 'will_paginate', '~> 3.0'
 gem 'will_paginate-bootstrap'
+gem 'acts-as-taggable-on'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do

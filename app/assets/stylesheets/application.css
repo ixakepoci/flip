@@ -19,7 +19,7 @@
  .container-fluid{width:100%;}
 html, body { height: 100%; width: 100%; position:fixed;top:0;left:0; }
 body{background-image: url(body-background.png);font-size:30px;}
-.stack-container{margin-left:15%;left:20%;margin-top:5%;height:100%;width:100%; perspective: 10000;}
+#stack-container{margin-left:15%;left:20%;margin-top:5%;height:100%;width:100%; perspective: 10000;}
 
 #left-nav{
     height:100%;
@@ -94,6 +94,17 @@ body{background-image: url(body-background.png);font-size:30px;}
 
     z-index:2;}
 
+    .pocket .metal{
+    width:90%;height:25%;position:absolute;top:5%;left:0;border-radius: 0 20% 20% 0;background-image : url(metal.png);    
+    -webkit-box-shadow:0 0 20px rgba(0,0,0,0.8);
+    -moz-box-shadow:0 0 20px rgba(0,0,0,0.8);
+    box-shadow:0 0 20px rgba(0,0,0,0.8); 
+
+    z-index:2;}
+
+    .metal .bolt {background-image : url(bolt.png); position:absolute;left:2%;width:7%;height:30%;
+    }
+
 .pocket .out {
     width: 95.049505%; /*192px 95.049505%*/
     height:  94%; /*293px;*/
@@ -166,10 +177,12 @@ body{background-image: url(body-background.png);font-size:30px;}
 }
 p.font {
     margin-top: 10%;
-    font-size: 2em;
+    font-size: 3em;
     font-family: Georgia;
-    color: #97453D;
-    text-shadow: 1px 1px 2px #3C1511;
+    
+
+    color: rgba(136, 85, 77, 1);
+    text-shadow: 0px -2px 0px rgba(0,0,0,.5);
     text-align: center;
 }
 
@@ -245,10 +258,29 @@ z-index:3;
 }
 .restart-btn{
   background-image : url(restart.png);  background-repeat:no-repeat;height:100%;    float:left;
-    position:relative;    
-  width:50%;box-shadow: 0 0 0 1px #653214;
+    position:relative;  top: 15%;left:15%;  
+
+  width:20%;
 }
 .shuffle-btn{
   background-image : url(shuffle.png);   background-repeat:no-repeat;height:100%;    float:left;
-  width:50%;box-shadow: 0 0 0 1px #653214;
+  width:20%;
+position:relative;  top: 15%;left:25%;  
 }
+
+.newcard-btn{
+  background-image : url(newcard.png);   background-repeat:no-repeat;height:100%;    float:left;
+  width:20%;
+position:relative;  top: 15%;left:35%;  
+}
+#tag_cloud {
+  width: 400px;
+  line-height: 1.6em;
+  .s { font-size: 0.8em; }
+  .m { font-size: 1.2em; }
+  .l { font-size: 1.8em; }
+}
+
+hr { 
+    border: 0; border-top: 1px solid #000;margin-top:50%;
+    }
